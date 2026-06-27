@@ -1,7 +1,6 @@
 import axios from 'axios';
-import type { Movie } from '../types/movie'; // Залишаємо імпорт лише для поодинокого фільму
+import type { Movie } from '../types/movie';
 
-// 1. Переносимо інтерфейс відповіді API сюди, як вимагає ментор
 export interface TMDBResponse {
   page: number;
   results: Movie[];
@@ -9,14 +8,19 @@ export interface TMDBResponse {
   total_results: number;
 }
 
+const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+
 const api = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    Accept: 'application/json',
+  },
 });
 
 export const fetchMovies = async (query: string, page: number): Promise<TMDBResponse> => {
   const response = await api.get<TMDBResponse>('/search/movie', {
     params: {
-      api_key: 'e932e66ee5819c11bae66b66cde73bfb',
       query,
       page,
       include_adult: false,

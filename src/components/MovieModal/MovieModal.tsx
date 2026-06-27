@@ -1,31 +1,38 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom'; // 1. Імпортуємо createPortal
 import { type Movie } from '../../types/movie';
 import css from './MovieModal.module.css';
 
 interface MovieModalProps {
-  movie: Movie | null;
+  movie: Movie; // Робимо обов'язковим, бо рендерити модалку будемо тільки якщо фільм є
   onClose: () => void;
 }
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
-  // Закриття по Esc
+  
   useEffect(() => {
-    if (!movie) return;
+    // 2. Блокуємо скрол сторінки при відкритті модалки
+    document.body.style.overflow = 'hidden';
 
+    // Закриття по Esc
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [movie, onClose]);
-
-  if (!movie) return null;
+    
+    // 3. Функція очищення (cleanup): повертаємо скрол назад при закритті модалки
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 
   const BACKDROP_URL = 'https://image.tmdb.org/t/p/w780';
   const POSTER_URL = 'https://image.tmdb.org/t/p/w342';
 
-  return (
+  // 4. Огортаємо JSX у createPortal, рендеримо в document.body
+  return createPortal(
     <div className={css.overlay} onClick={onClose}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
         <button className={css.closeButton} onClick={onClose}>
@@ -61,6 +68,7 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body // Переносимо вузол модалки в кінець тегу <body>
   );
 }

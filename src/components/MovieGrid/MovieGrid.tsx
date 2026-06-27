@@ -3,10 +3,12 @@ import css from './MovieGrid.module.css';
 
 interface MovieGridProps {
   movies: Movie[];
-  onMovieClick: (movie: Movie) => void; // Проп для майбутнього відкриття модалки
+  // 1. Змінюємо назву пропа з onMovieClick на onSelect
+  onSelect: (movie: Movie) => void; 
 }
 
-export default function MovieGrid({ movies, onMovieClick }: MovieGridProps) {
+// 2. Деструктуризуємо новий проп onSelect в аргументах компонента
+export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
   const BASE_IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
   return (
@@ -15,7 +17,8 @@ export default function MovieGrid({ movies, onMovieClick }: MovieGridProps) {
         <li 
           key={movie.id} 
           className={css.card} 
-          onClick={() => onMovieClick(movie)}
+          // 3. Викликаємо onSelect при кліці на картку фільму
+          onClick={() => onSelect(movie)}
         >
           <img
             src={
