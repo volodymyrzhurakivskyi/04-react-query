@@ -8,7 +8,7 @@ import type { ComponentType } from "react";
 import type { Movie } from '../../types/movie';
 
 // Імпорт сервісу запитів та компонентів
-import { fetchMovies } from '../../services/api';
+import { fetchMovies } from '../../services/movieService';
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
 import css from './App.module.css';
