@@ -7,34 +7,29 @@ interface SearchBarProps {
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
   
-  // 1. Функція обробника тепер приймає безпосередньо об'єкт FormData
   const handleSearchAction = (formData: FormData) => {
-    // 2. Отримуємо значення інпуту за його атрибутом name
-    const query = formData.get('movieQuery')?.toString().trim();
+    // 1. МІНЯЄМО ТУТ: тепер дістаємо за ключем 'query'
+    const query = formData.get('query')?.toString().trim();
 
-    // 3. Замість сивого alert використовуємо красивий toast.error
     if (!query) {
       toast.error('Будь ласка, введіть текст для пошуку! 🎬');
       return;
     }
 
-    // 4. Передаємо валідне значення в App.tsx
     onSubmit(query);
   };
 
   return (
     <header className={css.searchHeader}>
-      {/* 5. Замість onSubmit використовуємо атрибут action */}
       <form action={handleSearchAction} className={css.searchForm}>
         <input
           type="text"
-          // 6. ОБОВ'ЯЗКОВО: додаємо атрибут name, щоб FormData могла зчитати текст
-          name="movieQuery" 
+          // 2. І МІНЯЄМО ТУТ: значення атрибута name тепер строго 'query'
+          name="query" 
           autoComplete="off"
           autoFocus
           placeholder="Шукати фільми..."
           className={css.searchInput}
-          // Прибираємо value та onChange, вони більше не потрібні!
         />
         <button type="submit" className={css.searchButton}>
           Пошук
